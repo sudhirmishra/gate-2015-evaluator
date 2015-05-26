@@ -1,45 +1,53 @@
 <html>
-	<head>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-		<title>Evaluate your GATE-2015 response</title>
+
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<title>Evaluate your GATE-2015 response</title>
 		
-		<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 	<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-54764840-2', 'auto');
-  ga('send', 'pageview');
+	  ga('create', 'UA-54764840-2', 'auto');
+	  ga('send', 'pageview');
 
-</script>
-	</head>
+	  
+	</script>
+</head>
 	
 
 <body>
-<div class="body container">
-<h1>Evaluate GATE-2015 response against Made Easy answer key</h1>
-<h4>Send your love and concerns to <a href="mailto:sudhirxps+gate@gmail.com">sudhirxps+gate@gmail.com</a></h4>
-<div><a class="btn btn-info" href="/gate2015/">Evaluate another response</a></div>
-<hr/>
-<div id="summary" class="well text-bold">
-</div>
-<hr/>
-<div class="container" style="zoom:88%">
-<?
-	if(isset($_GET['response'])){
-    $url = $_GET['response'];
-    echo file_get_contents($url);
+	<div class="body container">
+	<h3>Evaluate GATE-2015 response against Made Easy answer key</h3>
+	<div>
+		<a class="btn btn-info" href="index.php">Evaluate another response</a>
+	</div>
 	
+	<hr/>
+	
+	<div id="summary" class="well text-bold">
+	</div>
+	
+	<hr/>
+
+	<?
+		if(isset($_GET['response'])){
+		$url = $_GET['response'];
+	?>
+	<div class="container" style="zoom:88%">
+	<?php
+		echo file_get_contents($url);
 	?>
 	
 	<script>
@@ -67,6 +75,8 @@
 		
 		marks_correct = {'1':0,'2':0}
 		marks_incorrect = {'1':0,'2':0}
+		marks_correct1 = {'1':0,'2':0}
+		marks_incorrect1 = {'1':0,'2':0}
 		
 		for( i=1;i<=65;i++){
 
@@ -97,12 +107,24 @@
 				
 				if(question_number == 41 || question_number == 20){
 					doubtful++;
+					if (question_number == 20)
+					{
+						marks_correct1[1]++;
+					}
+
+					if (question_number == 41)
+					{
+						marks_correct1[2]++;
+					}
+
+
 					document.images[i].parentNode.parentNode.parentNode.parentNode.style.border = "thick dotted yellow";
 					continue;
 				}
 			}else if(session == 7){
 				if(question_number == 38){
 					doubtful++;
+					marks_correct1[2]++;
 					document.images[i].parentNode.parentNode.parentNode.parentNode.style.border = "thick dotted yellow";
 					continue;
 				}
@@ -117,9 +139,11 @@
 					correct++;
 					
 					if( i <= 5){
-						marks_correct[1]++
+						marks_correct[1]++;
+						marks_correct1[1]++;
 					} else if (i > 5 && i <=10){
-						marks_correct[2]++
+						marks_correct[2]++;
+						marks_correct1[2]++;
 					}
 					
 					document.images[i].parentNode.parentNode.parentNode.parentNode.style.border = "thick solid green";
@@ -128,15 +152,21 @@
 					incorrect++
 					
 					if( i <= 5){
-						marks_incorrect[1]++
+						marks_incorrect[1]++;
+						marks_incorrect1[1]++;
 					} else if (i > 5 && i <=10){
-						marks_incorrect[2]++
+						marks_incorrect[2]++;
+						marks_incorrect1[2]++;
+						if(question_number == 8)
+						{
+							marks_incorrect1[2]--
+						}
 					}
 					
 					document.images[i].parentNode.parentNode.parentNode.parentNode.style.border = "thick solid red";
 					console.log("Q "+i+" incorrect");
 				}
-				document.images[i].parentNode.innerHTML = document.images[i].parentNode.innerHTML  + "<hr/><strong>Made Easy Answer :  </strong>"+correct_answer
+				
 			}else if(section !== "ga" && !isNaN(ans)){
 			
 				correct_answer = parseFloat(computer_science[parseInt(question_number)])
@@ -146,9 +176,11 @@
 					
 					
 					if( i > 10 & i <=35 ){
-						marks_correct[1]++
+						marks_correct[1]++;
+						marks_correct1[1]++
 					} else if (i > 35 && i <=65){
-						marks_correct[2]++
+						marks_correct[2]++;
+						marks_correct1[2]++
 					}
 					
 					document.images[i].parentNode.parentNode.parentNode.parentNode.style.border = "thick solid green";
@@ -157,22 +189,82 @@
 					incorrect++;
 					
 					if( i > 10 & i <=35 ){
-						marks_incorrect[1]++
+						marks_incorrect[1]++;
+						marks_incorrect1[1]++;
+						if(session == 5 ){
+							if( question_number == 24 || question_number == 23 || question_number == 20 || question_number == 19)
+							{
+								marks_incorrect1[1]--
+							}
+						}
+
+						if(session == 6){
+							if(question_number == 5 || question_number == 22 || question_number == 4 || question_number == 7 || question_number ==24 || question_number == 13 || question_number == 9 || question_number == 2 || question_number == 8 || question_number == 14 )
+							{
+								marks_incorrect1[1]--;
+							}
+						}
+						if(session == 7)
+						{
+							if(question_number == 7 || question_number == 12 || question_number == 11 || question_number == 23 || question_number == 15 )
+							{
+								marks_incorrect1[1]--;
+							}
+
+						}
+
+
 					} else if (i > 35 && i <=65){
-						marks_incorrect[2]++
+						marks_incorrect[2]++;
+						marks_incorrect1[2]++;
+						if(session == 5 ){
+							if(question_number == 45 || question_number == 48 || question_number == 26 || question_number == 38 || question_number == 28 || question_number == 44 || question_number == 37 || question_number == 29 || question_number == 53 || question_number == 31 || question_number == 42 || question_number == 39 || question_number == 34 || question_number == 46 )
+							{
+								marks_incorrect1[2]--;
+							}
+						}
+						if(session == 6){
+							if(question_number == 49 || question_number == 38 || question_number == 33 || question_number == 42 || question_number ==47 || question_number == 32 || question_number == 45 || question_number == 48 || question_number == 35 || question_number == 43 || question_number == 55 )
+							{
+								marks_incorrect1[2]--;
+							}
+						}
+						if(session == 7)
+						{
+							if(question_number == 29 || question_number == 43 || question_number == 37 || question_number == 38 || question_number == 52 || question_number ==36 || question_number == 51 || question_number == 45 || question_number == 26 || question_number == 53 || question_number == 49 || question_number==33 || question_number == 32 || question_number == 46 )
+							{
+								marks_incorrect1[2]--;
+							}
+
+						}
+
+
 					}
 					
 					document.images[i].parentNode.parentNode.parentNode.parentNode.style.border = "thick solid red";
 					console.log("Q "+i+" incorrect");
 				}
-				document.images[i].parentNode.innerHTML = document.images[i].parentNode.innerHTML  + "<hr/><strong>Made Easy Answer :  </strong>"+correct_answer
+				
 			}else if(isNaN(ans)){
 				not_attempted++;
+				if(section === "ga")
+				{
+				correct_answer = parseFloat(general_aptitude[parseInt(question_number)])
+				}
+				if (section !== "ga" )
+				{
+				correct_answer = parseFloat(computer_science[parseInt(question_number)])
+				}				
 				console.log("NA "+i);
 			}
-		}
+			
 
-		var summary = "Correct : <strong class='text-success'>"+correct+"</strong>, Incorrect : <strong class='text-danger'>"+incorrect+"</strong> Not Attempted : "+not_attempted;
+		document.images[i].parentNode.innerHTML = document.images[i].parentNode.innerHTML  + "<hr/><strong>Made Easy Answer :  </strong> "+correct_answer + " <hr/> Q. " + question_number
+
+		}
+		var total = marks_correct1['1'] + marks_correct1['2'] * 2  - (marks_incorrect1['1'] + marks_incorrect1['2'] * 2 ) /3 ;
+		var summary ="<br/> <h4>Your expected marks are very near to <span class='text-success'>" + total + ".</span></h4><br/>";
+		summary += "Correct : <strong class='text-success'>"+correct+"</strong>, Incorrect : <strong class='text-danger'>"+incorrect+"</strong> Not Attempted : "+not_attempted;
 		summary+="<br/>Total questions "+(correct+incorrect+not_attempted);
 		
 		summary+="<br/><strong class='text-success'>Correct 1 Marks : "+marks_correct['1']+"</strong>";
@@ -181,16 +273,27 @@
 		summary+="<br/><strong class='text-danger'>Incorrect 1 Marks : "+marks_incorrect['1']+"</strong>";
 		summary+="<br/><strong class='text-danger'>Incorrect 2 Marks : "+marks_incorrect['2']+"</strong>";
 		
+		
 		summary+="<br/>Questions with no answer or multiple answers are marked in yellow; There are total of "+doubtful+" question(s).";
 
 		document.getElementById('summary').innerHTML = summary;
 
-		</script>
+	</script>
+	</div>
 	<?php
-	}else{
-		?>
-		Enter the web page url of GATE response <input type="text"/>
-		<button class="btn btn-info">Evaluate</button>
+		}else{
+	?>
+		<ol>
+			<li>Login @ <a target="_blank" href="https://appsgate.iitk.ac.in/login.html">GOAPS portal</a></li>
+			<li>Click on <strong>View Response</strong></li>
+			<li>Copy the URL of the page that opens</li>
+			<li>
+				<label>Enter the web page url </label> <input type="text"/>
+				<button class="btn btn-info">Evaluate</button>
+			</li>
+		</ol>
+		
+		
 		<script>
 			jQuery('button').click(function(){				
 				ga('send', 'event','gate-evaluator',jQuery('input').val());
@@ -198,10 +301,17 @@
 			});
 		</script>
 	<?php
-	}
-?>
-</div>
+		}
+	?>
 
+<footer>
+<hr/>
+<div class="container">
+Checkout the code @ <a href="https://github.com/sudhirmishra/gate-2015-evaluator" title="Source Code @ Github">Github </a>
+
+<h4>Send your love and concerns to <a href="mailto:sudhirxps+gate@gmail.com">sudhirxps+gate@gmail.com</a></h4>
+</div>
+</footer>
 </div>
 </body>
 </html>
